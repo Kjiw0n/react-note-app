@@ -1,15 +1,16 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import NoteItem from "./NoteItem";
+import { useNavigate } from "react-router-dom";
 
-const Main = () => {
+interface MainProps {
+  isDarkMode: boolean;
+  toggleTheme: () => void;
+}
+
+const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
+  const navigate = useNavigate();
   const [sortOption, setSortOption] = useState("recentlyCreated");
-  const [isLight, setIsLight] = useState(true);
-
-  const toggleTheme = () => {
-    setIsLight(!isLight);
-    // TODO: 실제로 테마 바뀌도록 마저 구현
-  };
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(event.target.value);
@@ -22,12 +23,12 @@ const Main = () => {
         <NoteTitleContainer>
           <NoteTitle>Notes App</NoteTitle>
           <ThemeToggleButton onClick={toggleTheme}>
-            {isLight ? "☀️" : "🌙"}
+            {isDarkMode ? "🌙" : "☀️"}
           </ThemeToggleButton>
         </NoteTitleContainer>
         <NoteDescription>기록하기!</NoteDescription>
         <SearchContainer>
-          <SearchInput type="text" placeholder="search" />
+          <SearchInput type="text" placeholder="검색" />
           <SortDropdown value={sortOption} onChange={handleSortChange}>
             <option value="recentlyCreated">최근 생성순</option>
             <option value="recentlyModified">최신 수정순</option>
@@ -36,7 +37,9 @@ const Main = () => {
         <NoteItem title="할일1" description="할일을하자" />
         <NoteItem title="할일2" description="할일을하자" />
         <NoteItem title="할일3" description="할일을하자" />
-        <CreateNoteButton>노트 생성</CreateNoteButton>
+        <CreateNoteButton onClick={() => navigate("/note")}>
+          노트 생성
+        </CreateNoteButton>
       </NoteContainer>
     </Container>
   );
@@ -49,11 +52,11 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0;
+  background-color: ${({ theme }) => theme.colors.lightgray};
 `;
 
 const NoteContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.transparentBackground};
+  background-color: ${({ theme }) => theme.colors.background};
   width: 36rem;
   height: 60rem;
   padding: 2rem;
@@ -72,7 +75,7 @@ const NoteTitleContainer = styled.div`
 const NoteTitle = styled.h1`
   font-size: 2rem;
   font-weight: bold;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const ThemeToggleButton = styled.button`
@@ -84,7 +87,7 @@ const ThemeToggleButton = styled.button`
 
 const NoteDescription = styled.p`
   font-size: 1.5rem;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: 2rem;
 `;
 
@@ -97,16 +100,17 @@ const SearchContainer = styled.div`
 const SearchInput = styled.input`
   width: 100%;
   padding: 1rem;
-  border: 1px solid ${({ theme }) => theme.colors.lightgray};
+  border: 1px solid ${({ theme }) => theme.colors.blue};
   border-radius: 1rem;
 `;
 
 const SortDropdown = styled.select`
   margin-left: 1rem;
   padding: 1rem;
-  border: 1px solid ${({ theme }) => theme.colors.lightgray};
+  border: 1px solid ${({ theme }) => theme.colors.blue};
   border-radius: 1rem;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const CreateNoteButton = styled.button`
