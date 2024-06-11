@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import NoteItem from "./NoteItem";
 
 const Main = () => {
   const [sortOption, setSortOption] = useState("recentlyCreated");
@@ -31,7 +32,9 @@ const Main = () => {
             <option value="recentlyModified">최신 수정순</option>
           </SortDropdown>
         </SearchContainer>
-        <div>노트아이템</div>
+        <NoteItem title="할일1" description="할일을하자" />
+        <NoteItem title="할일2" description="할일을하자" />
+        <NoteItem title="할일3" description="할일을하자" />
         <CreateNoteButton>노트 생성</CreateNoteButton>
       </NoteContainer>
     </Container>
