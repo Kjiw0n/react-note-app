@@ -1,19 +1,39 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import NoteItem from "./NoteItem";
+import { useNavigate, useParams } from "react-router-dom";
 
-const Main = () => {
-  const [sortOption, setSortOption] = useState("recentlyCreated");
+const Note = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const [isLight, setIsLight] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      // TODO: id를 이용해 노트 데이터를 불러와서 title과 content 상태 set
+    }
+  }, [id]);
 
   const toggleTheme = () => {
     setIsLight(!isLight);
-    // TODO: 실제로 테마 바뀌도록 마저 구현
   };
 
-  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortOption(event.target.value);
-    // TODO: 정렬 기능 마저 구현
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    if (id) {
+      // TODO: 노트 수정 로직 추가
+    } else {
+      // TODO: 노트 생성 로직 추가
+    }
+    navigate("/");
   };
 
   return (
@@ -26,23 +46,24 @@ const Main = () => {
           </ThemeToggleButton>
         </NoteTitleContainer>
         <NoteDescription>기록하기!</NoteDescription>
-        <SearchContainer>
-          <SearchInput type="text" placeholder="search" />
-          <SortDropdown value={sortOption} onChange={handleSortChange}>
-            <option value="recentlyCreated">최근 생성순</option>
-            <option value="recentlyModified">최신 수정순</option>
-          </SortDropdown>
-        </SearchContainer>
-        <NoteItem title="할일1" description="할일을하자" />
-        <NoteItem title="할일2" description="할일을하자" />
-        <NoteItem title="할일3" description="할일을하자" />
-        <CreateNoteButton>노트 생성</CreateNoteButton>
+        <Input
+          type="text"
+          placeholder="노트 제목을 입력해주세요."
+          value={title}
+          onChange={handleTitleChange}
+        />
+        <Textarea
+          placeholder="노트 내용을 입력해주세요."
+          value={content}
+          onChange={handleContentChange}
+        />
+        <SubmitButton onClick={handleSubmit}>확인</SubmitButton>
       </NoteContainer>
     </Container>
   );
 };
 
-export default Main;
+export default Note;
 
 const Container = styled.div`
   display: flex;
@@ -54,7 +75,7 @@ const Container = styled.div`
 
 const NoteContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.transparentBackground};
-  width: 36rem;
+  width: 40rem;
   height: 60rem;
   padding: 2rem;
   border-radius: 1.6rem;
@@ -88,28 +109,24 @@ const NoteDescription = styled.p`
   margin-bottom: 2rem;
 `;
 
-const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-`;
-
-const SearchInput = styled.input`
+const Input = styled.input`
   width: 100%;
   padding: 1rem;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 1rem;
+  margin-bottom: 1rem;
 `;
 
-const SortDropdown = styled.select`
-  margin-left: 1rem;
+const Textarea = styled.textarea`
+  width: 100%;
   padding: 1rem;
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 1rem;
-  background-color: #fff;
+  margin-bottom: 1rem;
+  height: 10rem;
 `;
 
-const CreateNoteButton = styled.button`
+const SubmitButton = styled.button`
   background-color: ${({ theme }) => theme.colors.blue};
   color: ${({ theme }) => theme.colors.white};
   padding: 1rem 2rem;
