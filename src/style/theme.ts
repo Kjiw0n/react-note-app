@@ -11,3 +11,19 @@ const colors = {
 const theme = { colors };
 
 export default theme;
+
+export const lightTheme = {
+  colors: {
+    background: "#f0f0f0",
+    text: "#000000",
+    primary: "#6200ee",
+  },
+};
+
+export const darkTheme = {
+  colors: {
+    background: "#121212",
+    text: "#ffffff",
+    primary: "#bb86fc",
+  },
+};
