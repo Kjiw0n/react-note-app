@@ -1,13 +1,25 @@
+import { useState } from "react";
 import styled from "styled-components";
-import NoteItem from "./NoteItem";
 
 const Main = () => {
+  const [sortOption, setSortOption] = useState("recentlyCreated");
+
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(event.target.value);
+    // TODO: 정렬 기능 마저 구현
+  };
   return (
     <Container>
       <NoteContainer>
         <NoteTitle>Note App</NoteTitle>
         <NoteDescription>기록하기!</NoteDescription>
-        <SearchInput type="text" placeholder="search" />
+        <SearchContainer>
+          <SearchInput type="text" placeholder="search" />
+          <SortDropdown value={sortOption} onChange={handleSortChange}>
+            <option value="recentlyCreated">최근 생성순</option>
+            <option value="recentlyModified">최신 수정순</option>
+          </SortDropdown>
+        </SearchContainer>
         <div>노트아이템</div>
         <CreateNoteButton>노트 생성</CreateNoteButton>
       </NoteContainer>
@@ -46,12 +58,25 @@ const NoteDescription = styled.p`
   margin-bottom: 1.6rem;
 `;
 
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.6rem;
+`;
+
 const SearchInput = styled.input`
   width: 100%;
   padding: 0.8rem;
-  margin-bottom: 1.6rem;
   border: 1px solid #ddd;
   border-radius: 0.8rem;
+`;
+
+const SortDropdown = styled.select`
+  margin-left: 0.8rem;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 0.8rem;
+  background-color: #fff;
 `;
 
 const CreateNoteButton = styled.button`
