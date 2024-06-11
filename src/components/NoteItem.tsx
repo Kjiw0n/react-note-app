@@ -23,6 +23,13 @@ const NoteItemContainer = styled.div`
   margin: 0.8rem 0;
   border-radius: 0.8rem;
   box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+
+  ${({ theme }) =>
+    theme.isDarkMode &&
+    `
+    background-color: rgba(255, 255, 255, 0.1);
+    color: ${theme.colors.text};
+  `}
 `;
 
 const NoteItemText = styled.p`
@@ -30,10 +37,22 @@ const NoteItemText = styled.p`
   font-weight: bold;
   color: ${({ theme }) => theme.colors.black};
   margin: 0;
+
+  ${({ theme }) =>
+    theme.isDarkMode &&
+    `
+    color: ${theme.colors.text};
+  `}
 `;
 
 const NoteDescription = styled.p`
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.gray};
   margin-top: 0.4rem;
+
+  ${({ theme }) =>
+    theme.isDarkMode &&
+    `
+    color: ${theme.colors.lightgray};
+  `}
 `;

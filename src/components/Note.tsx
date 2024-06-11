@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 
-const Note = () => {
+interface NoteProps {
+  isDarkMode: boolean;
+  toggleTheme: () => void;
+}
+
+const Note = ({ isDarkMode, toggleTheme }: NoteProps) => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [isLight, setIsLight] = useState(true);
 
   useEffect(() => {
     if (id) {
       // TODO: id를 이용해 노트 데이터를 불러와서 title과 content 상태 set
     }
   }, [id]);
-
-  const toggleTheme = () => {
-    setIsLight(!isLight);
-  };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -42,7 +42,7 @@ const Note = () => {
         <NoteTitleContainer>
           <NoteTitle>Notes App</NoteTitle>
           <ThemeToggleButton onClick={toggleTheme}>
-            {isLight ? "☀️" : "🌙"}
+            {isDarkMode ? "🌙" : "☀️"}
           </ThemeToggleButton>
         </NoteTitleContainer>
         <NoteDescription>기록하기!</NoteDescription>
@@ -70,12 +70,12 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0;
+  background-color: ${({ theme }) => theme.colors.lightgray};
 `;
 
 const NoteContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.transparentBackground};
-  width: 40rem;
+  background-color: ${({ theme }) => theme.colors.background};
+  width: 36rem;
   height: 60rem;
   padding: 2rem;
   border-radius: 1.6rem;
@@ -93,7 +93,7 @@ const NoteTitleContainer = styled.div`
 const NoteTitle = styled.h1`
   font-size: 2rem;
   font-weight: bold;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const ThemeToggleButton = styled.button`
@@ -105,7 +105,7 @@ const ThemeToggleButton = styled.button`
 
 const NoteDescription = styled.p`
   font-size: 1.5rem;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: 2rem;
 `;
 
@@ -115,6 +115,8 @@ const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.lightgray};
   border-radius: 1rem;
   margin-bottom: 1rem;
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const Textarea = styled.textarea`
@@ -124,6 +126,8 @@ const Textarea = styled.textarea`
   border-radius: 1rem;
   margin-bottom: 1rem;
   height: 10rem;
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const SubmitButton = styled.button`
