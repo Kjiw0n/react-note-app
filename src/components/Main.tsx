@@ -58,6 +58,8 @@ const NoteContainer = styled.div`
   border-radius: 1.6rem;
   box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.1);
   text-align: left;
+  position: relative;
+  padding-bottom: 10rem;
 `;
 
 const NoteTitleContainer = styled.div`
@@ -68,6 +70,7 @@ const NoteTitleContainer = styled.div`
 
 const NoteTitle = styled.h1`
   font-size: 2rem;
+  font-weight: bold;
   color: ${({ theme }) => theme.colors.black};
 `;
 
@@ -112,4 +115,7 @@ const CreateNoteButton = styled.button`
   border: none;
   border-radius: 1rem;
   cursor: pointer;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
 `;

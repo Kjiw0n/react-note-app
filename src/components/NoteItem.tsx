@@ -27,12 +27,13 @@ const NoteItemContainer = styled.div`
 
 const NoteItemText = styled.p`
   font-size: 1.5rem;
+  font-weight: bold;
   color: ${({ theme }) => theme.colors.black};
   margin: 0;
 `;
 
 const NoteDescription = styled.p`
   font-size: 1rem;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.gray};
   margin-top: 0.4rem;
 `;
