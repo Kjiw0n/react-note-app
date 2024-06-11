@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import NoteItem from "./NoteItem";
 
 const Main = () => {
   const [sortOption, setSortOption] = useState("recentlyCreated");
@@ -31,7 +32,9 @@ const Main = () => {
             <option value="recentlyModified">최신 수정순</option>
           </SortDropdown>
         </SearchContainer>
-        <div>노트아이템</div>
+        <NoteItem title="할일1" description="할일을하자" />
+        <NoteItem title="할일2" description="할일을하자" />
+        <NoteItem title="할일3" description="할일을하자" />
         <CreateNoteButton>노트 생성</CreateNoteButton>
       </NoteContainer>
     </Container>
@@ -55,6 +58,8 @@ const NoteContainer = styled.div`
   border-radius: 1.6rem;
   box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.1);
   text-align: left;
+  position: relative;
+  padding-bottom: 10rem;
 `;
 
 const NoteTitleContainer = styled.div`
@@ -65,6 +70,7 @@ const NoteTitleContainer = styled.div`
 
 const NoteTitle = styled.h1`
   font-size: 2rem;
+  font-weight: bold;
   color: ${({ theme }) => theme.colors.black};
 `;
 
@@ -109,4 +115,7 @@ const CreateNoteButton = styled.button`
   border: none;
   border-radius: 1rem;
   cursor: pointer;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
 `;
