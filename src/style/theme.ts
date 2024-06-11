@@ -4,6 +4,8 @@ const colors = {
   black: "#000000",
   red: "#FF0000",
   gray: "#808080",
+  blue: "#3587F2",
+  lightgray: "#ddd",
 };
 
 const theme = { colors };
