@@ -3,6 +3,12 @@ import styled from "styled-components";
 
 const Main = () => {
   const [sortOption, setSortOption] = useState("recentlyCreated");
+  const [isLight, setIsLight] = useState(true);
+
+  const toggleTheme = () => {
+    setIsLight(!isLight);
+    // TODO: 실제로 테마 바뀌도록 마저 구현
+  };
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(event.target.value);
@@ -11,7 +17,12 @@ const Main = () => {
   return (
     <Container>
       <NoteContainer>
-        <NoteTitle>Note App</NoteTitle>
+        <NoteTitleContainer>
+          <NoteTitle>Notes App</NoteTitle>
+          <ThemeToggleButton onClick={toggleTheme}>
+            {isLight ? "☀️" : "🌙"}
+          </ThemeToggleButton>
+        </NoteTitleContainer>
         <NoteDescription>기록하기!</NoteDescription>
         <SearchContainer>
           <SearchInput type="text" placeholder="search" />
@@ -46,10 +57,22 @@ const NoteContainer = styled.div`
   text-align: left;
 `;
 
+const NoteTitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const NoteTitle = styled.h1`
-  font-size: 3rem;
-  font-weight: bold;
+  font-size: 1.5rem;
   color: ${({ theme }) => theme.colors.black};
+`;
+
+const ThemeToggleButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
 `;
 
 const NoteDescription = styled.p`
