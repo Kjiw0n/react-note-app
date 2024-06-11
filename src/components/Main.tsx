@@ -64,7 +64,7 @@ const NoteTitleContainer = styled.div`
 `;
 
 const NoteTitle = styled.h1`
-  font-size: 1.5rem;
+  font-size: 2rem;
   color: ${({ theme }) => theme.colors.black};
 `;
 
@@ -78,27 +78,27 @@ const ThemeToggleButton = styled.button`
 const NoteDescription = styled.p`
   font-size: 1.5rem;
   color: ${({ theme }) => theme.colors.black};
-  margin-bottom: 1.6rem;
+  margin-bottom: 2rem;
 `;
 
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 1.6rem;
+  margin-bottom: 2rem;
 `;
 
 const SearchInput = styled.input`
   width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 0.8rem;
+  padding: 1rem;
+  border: 1px solid ${({ theme }) => theme.colors.lightgray};
+  border-radius: 1rem;
 `;
 
 const SortDropdown = styled.select`
-  margin-left: 0.8rem;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 0.8rem;
+  margin-left: 1rem;
+  padding: 1rem;
+  border: 1px solid ${({ theme }) => theme.colors.lightgray};
+  border-radius: 1rem;
   background-color: #fff;
 `;
 
@@ -107,6 +107,6 @@ const CreateNoteButton = styled.button`
   color: ${({ theme }) => theme.colors.white};
   padding: 1rem 2rem;
   border: none;
-  border-radius: 0.8rem;
+  border-radius: 1rem;
   cursor: pointer;
 `;
