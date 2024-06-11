@@ -15,6 +15,7 @@ const Main = () => {
     setSortOption(event.target.value);
     // TODO: 정렬 기능 마저 구현
   };
+
   return (
     <Container>
       <NoteContainer>
@@ -54,12 +55,12 @@ const Container = styled.div`
 const NoteContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.transparentBackground};
   width: 36rem;
+  height: 60rem;
   padding: 2rem;
   border-radius: 1.6rem;
   box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.1);
   text-align: left;
   position: relative;
-  padding-bottom: 10rem;
 `;
 
 const NoteTitleContainer = styled.div`
