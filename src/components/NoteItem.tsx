@@ -1,16 +1,26 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 interface NoteItemProps {
+  id: string;
   title: string;
-  description: string;
+  content: string;
+  updatedAt: string;
 }
 
 const NoteItem = (props: NoteItemProps) => {
-  const { title, description } = props;
+  const { id, title, content, updatedAt } = props;
+  const navigate = useNavigate();
+
+  const handleEdit = () => {
+    navigate(`/note/${id}`);
+  };
+
   return (
-    <NoteItemContainer>
+    <NoteItemContainer onClick={handleEdit}>
       <NoteItemText>{title}</NoteItemText>
-      <NoteDescription>{description}</NoteDescription>
+      <NoteDescription>{content}</NoteDescription>
+      <NoteUpdated>{updatedAt}</NoteUpdated>
     </NoteItemContainer>
   );
 };
@@ -23,6 +33,7 @@ const NoteItemContainer = styled.div`
   margin: 0.8rem 0;
   border-radius: 0.8rem;
   box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 
   ${({ theme }) =>
     theme.isDarkMode &&
@@ -37,12 +48,6 @@ const NoteItemText = styled.p`
   font-weight: bold;
   color: ${({ theme }) => theme.colors.black};
   margin: 0;
-
-  ${({ theme }) =>
-    theme.isDarkMode &&
-    `
-    color: ${theme.colors.text};
-  `}
 `;
 
 const NoteDescription = styled.p`
@@ -55,4 +60,10 @@ const NoteDescription = styled.p`
     `
     color: ${theme.colors.lightgray};
   `}
+`;
+
+const NoteUpdated = styled.p`
+  font-size: 0.8rem;
+  color: ${({ theme }) => theme.colors.lightgray};
+  margin-top: 0.4rem;
 `;
