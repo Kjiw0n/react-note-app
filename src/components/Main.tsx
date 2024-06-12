@@ -14,6 +14,7 @@ interface Note {
   content: string;
   createdAt: string;
   updatedAt: string;
+  isStar: boolean; // 즐겨찾기 여부 추가
 }
 
 const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
@@ -36,17 +37,21 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
     const sortNotes = () => {
       if (noteList.length > 0) {
         const sorted = [...noteList];
-        if (sortOption === "recentlyCreated") {
-          sorted.sort(
-            (a, b) =>
+        sorted.sort((a, b) => {
+          if (a.isStar !== b.isStar) {
+            return b.isStar ? 1 : -1;
+          }
+          if (sortOption === "recentlyCreated") {
+            return (
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-        } else if (sortOption === "recentlyModified") {
-          sorted.sort(
-            (a, b) =>
+            );
+          } else if (sortOption === "recentlyModified") {
+            return (
               new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-          );
-        }
+            );
+          }
+          return 0;
+        });
         setSortedNotes(sorted);
       }
     };
@@ -60,6 +65,14 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(event.target.value);
+  };
+
+  const toggleStar = (id: string) => {
+    const updatedNotes = noteList.map((note) =>
+      note.id === id ? { ...note, isStar: !note.isStar } : note
+    );
+    setNoteList(updatedNotes);
+    localStorage.setItem("noteList", JSON.stringify(updatedNotes));
   };
 
   return (
@@ -91,6 +104,8 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
                 title={note.title}
                 content={note.content}
                 updatedAt={note.updatedAt}
+                isStar={note.isStar}
+                toggleStar={toggleStar}
               />
             ))
           ) : (
