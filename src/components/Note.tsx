@@ -17,7 +17,12 @@ const Note = ({ isDarkMode, toggleTheme }: NoteProps) => {
 
   useEffect(() => {
     if (id) {
-      // TODO: id를 이용해 노트 데이터를 불러와서 title과 content 상태 set
+      const noteList = JSON.parse(localStorage.getItem("noteList") || "[]");
+      const note = noteList.find((note: any) => note.id === id);
+      if (note) {
+        setTitle(note.title);
+        setContent(note.content);
+      }
     }
   }, [id]);
 
