@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import moment from "moment";
 
 interface NoteProps {
   isDarkMode: boolean;
@@ -28,10 +30,24 @@ const Note = ({ isDarkMode, toggleTheme }: NoteProps) => {
   };
 
   const handleSubmit = () => {
+    const noteList = JSON.parse(localStorage.getItem("noteList") || "[]");
     if (id) {
-      // TODO: 노트 수정 로직 추가
+      const updatedNoteList = noteList.map((note: any) =>
+        note.id === id
+          ? { ...note, title, content, updatedAt: moment().format() }
+          : note
+      );
+      localStorage.setItem("noteList", JSON.stringify(updatedNoteList));
     } else {
-      // TODO: 노트 생성 로직 추가
+      const newNote = {
+        id: uuidv4(),
+        title,
+        content,
+        createdAt: moment().format(),
+        updatedAt: moment().format(),
+      };
+      noteList.push(newNote);
+      localStorage.setItem("noteList", JSON.stringify(noteList));
     }
     navigate("/");
   };
@@ -137,7 +153,13 @@ const SubmitButton = styled.button`
   border: none;
   border-radius: 1rem;
   cursor: pointer;
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
+`;
+
+const DeleteButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.red};
+  color: ${({ theme }) => theme.colors.white};
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
 `;
