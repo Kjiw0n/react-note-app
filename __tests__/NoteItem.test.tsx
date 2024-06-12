@@ -28,26 +28,27 @@ const renderWithTheme = (ui: React.ReactElement) => {
   );
 };
 
-describe("<NoteItem />", () => {
-  it("renders NoteItem component with title and content", () => {
-    renderWithTheme(<NoteItem {...noteItemProps} />);
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
-    expect(screen.getByText(/Test Title/i)).toBeInTheDocument();
-    expect(screen.getByText(/Test Content/i)).toBeInTheDocument();
-    // Using a function to match the date text more flexibly
-    expect(
-      screen.getByText((content, element) => {
-        const hasText = (text: string) => element.textContent === text;
-        const date = new Date("2023-06-12T00:00:00Z").toLocaleString();
-        return hasText(date);
-      })
-    ).toBeInTheDocument();
-  });
+test("renders NoteItem component with title and content", () => {
+  renderWithTheme(<NoteItem {...noteItemProps} />);
 
-  it("navigates to the correct page on click", () => {
-    renderWithTheme(<NoteItem {...noteItemProps} />);
+  expect(screen.getByText(/Test Title/i)).toBeInTheDocument();
+  expect(screen.getByText(/Test Content/i)).toBeInTheDocument();
+  expect(
+    screen.getByText((content, element) => {
+      const hasText = (text: string) => element.textContent === text;
+      const date = new Date("2023-06-12T00:00:00Z").toLocaleString();
+      return hasText(date);
+    })
+  ).toBeInTheDocument();
+});
 
-    fireEvent.click(screen.getByText(/Test Title/i));
-    expect(mockNavigate).toHaveBeenCalledWith("/note/1");
-  });
+test("navigates to the correct page on click", () => {
+  renderWithTheme(<NoteItem {...noteItemProps} />);
+
+  fireEvent.click(screen.getByText(/Test Title/i));
+  expect(mockNavigate).toHaveBeenCalledWith("/note/1");
 });
