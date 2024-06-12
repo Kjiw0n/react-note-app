@@ -8,15 +8,51 @@ interface MainProps {
   toggleTheme: () => void;
 }
 
+interface Note {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
   const navigate = useNavigate();
-  const [noteList, setNoteList] = useState([]);
+  const [noteList, setNoteList] = useState<Note[]>([]);
+  const [sortedNotes, setSortedNotes] = useState<Note[]>([]);
   const [sortOption, setSortOption] = useState("recentlyCreated");
 
+  const selectList = ["recentlyCreated", "recentlyModified"];
+
   useEffect(() => {
-    const savedNotes = JSON.parse(localStorage.getItem("noteList") || "[]");
+    const savedNotes = JSON.parse(
+      localStorage.getItem("noteList") || "[]"
+    ) as Note[];
+    console.log("Loaded notes from localStorage:", savedNotes);
     setNoteList(savedNotes);
   }, []);
+
+  useEffect(() => {
+    const sortNotes = () => {
+      if (noteList.length > 0) {
+        const sorted = [...noteList];
+        if (sortOption === "recentlyCreated") {
+          sorted.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        } else if (sortOption === "recentlyModified") {
+          sorted.sort(
+            (a, b) =>
+              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          );
+        }
+        setSortedNotes(sorted);
+      }
+    };
+
+    sortNotes();
+  }, [sortOption, noteList]);
 
   const handleCreateNote = () => {
     navigate("/note");
@@ -24,7 +60,6 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(event.target.value);
-    // TODO: 정렬 기능 마저 구현
   };
 
   return (
@@ -40,22 +75,28 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
         <SearchContainer>
           <SearchInput type="text" placeholder="검색" />
           <SortDropdown value={sortOption} onChange={handleSortChange}>
-            <option value="recentlyCreated">최근 생성순</option>
-            <option value="recentlyModified">최신 수정순</option>
+            {selectList.map((option, index) => (
+              <option key={index} value={option}>
+                {option === "recentlyCreated" ? "최근 생성순" : "최근 수정순"}
+              </option>
+            ))}
           </SortDropdown>
         </SearchContainer>
         <NoteListContainer>
-          {noteList.map((note: any) => (
-            <NoteItem
-              key={note.id}
-              id={note.id}
-              title={note.title}
-              content={note.content}
-              updatedAt={note.updatedAt}
-            />
-          ))}
+          {sortedNotes.length > 0 ? (
+            sortedNotes.map((note) => (
+              <NoteItem
+                key={note.id}
+                id={note.id}
+                title={note.title}
+                content={note.content}
+                updatedAt={note.updatedAt}
+              />
+            ))
+          ) : (
+            <p>노트가 없습니다.</p>
+          )}
         </NoteListContainer>
-
         <CreateNoteButton onClick={handleCreateNote}>
           노트 생성
         </CreateNoteButton>

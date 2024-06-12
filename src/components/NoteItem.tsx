@@ -20,7 +20,7 @@ const NoteItem = (props: NoteItemProps) => {
     <NoteItemContainer onClick={handleEdit}>
       <NoteItemText>{title}</NoteItemText>
       <NoteDescription>{content}</NoteDescription>
-      <NoteUpdated>{updatedAt}</NoteUpdated>
+      <NoteUpdated>{new Date(updatedAt).toLocaleString()}</NoteUpdated>
     </NoteItemContainer>
   );
 };
@@ -63,7 +63,7 @@ const NoteDescription = styled.p`
 `;
 
 const NoteUpdated = styled.p`
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: ${({ theme }) => theme.colors.lightgray};
   margin-top: 0.4rem;
 `;
