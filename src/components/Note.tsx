@@ -52,6 +52,13 @@ const Note = ({ isDarkMode, toggleTheme }: NoteProps) => {
     navigate("/");
   };
 
+  const handleDelete = () => {
+    const noteList = JSON.parse(localStorage.getItem("noteList") || "[]");
+    const updatedNoteList = noteList.filter((note: any) => note.id !== id);
+    localStorage.setItem("noteList", JSON.stringify(updatedNoteList));
+    navigate("/");
+  };
+
   return (
     <Container>
       <NoteContainer>
@@ -73,7 +80,10 @@ const Note = ({ isDarkMode, toggleTheme }: NoteProps) => {
           value={content}
           onChange={handleContentChange}
         />
-        <SubmitButton onClick={handleSubmit}>확인</SubmitButton>
+        <ButtonContainer>
+          {id && <DeleteButton onClick={handleDelete}>삭제</DeleteButton>}
+          <SubmitButton onClick={handleSubmit}>확인</SubmitButton>
+        </ButtonContainer>
       </NoteContainer>
     </Container>
   );
@@ -144,6 +154,14 @@ const Textarea = styled.textarea`
   height: 10rem;
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 1rem;
+  width: 90%;
 `;
 
 const SubmitButton = styled.button`
