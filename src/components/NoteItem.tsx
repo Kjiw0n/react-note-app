@@ -6,21 +6,29 @@ interface NoteItemProps {
   title: string;
   content: string;
   updatedAt: string;
+  isStar: boolean;
+  toggleStar: (id: string) => void;
 }
 
 const NoteItem = (props: NoteItemProps) => {
-  const { id, title, content, updatedAt } = props;
+  const { id, title, content, updatedAt, isStar, toggleStar } = props;
   const navigate = useNavigate();
 
   const handleEdit = () => {
     navigate(`/note/${id}`);
   };
 
+  const handleToggleStar = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    toggleStar(id);
+  };
+
   return (
     <NoteItemContainer onClick={handleEdit}>
       <NoteItemText>{title}</NoteItemText>
       <NoteDescription>{content}</NoteDescription>
-      <NoteUpdated>{new Date(updatedAt).toLocaleString()}</NoteUpdated>
+      <NoteTime>{new Date(updatedAt).toLocaleString()}</NoteTime>
+      <StarButton onClick={handleToggleStar} isStar={isStar} />
     </NoteItemContainer>
   );
 };
@@ -34,6 +42,7 @@ const NoteItemContainer = styled.div`
   border-radius: 0.8rem;
   box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  position: relative;
 
   ${({ theme }) =>
     theme.isDarkMode &&
@@ -62,8 +71,20 @@ const NoteDescription = styled.p`
   `}
 `;
 
-const NoteUpdated = styled.p`
-  font-size: 1rem;
+const NoteTime = styled.p`
+  font-size: 0.8rem;
   color: ${({ theme }) => theme.colors.lightgray};
   margin-top: 0.4rem;
+`;
+
+const StarButton = styled.button<{ isStar: boolean }>`
+  background: ${({ isStar, theme }) => (isStar ? theme.colors.blue : "none")};
+  border: 0.15rem solid ${({ theme }) => theme.colors.blue};
+  cursor: pointer;
+  width: 2rem;
+  height: 3rem;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  border-radius: 0.5rem;
 `;
