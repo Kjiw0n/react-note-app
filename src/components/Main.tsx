@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import NoteItem from "./NoteItem";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,17 @@ interface MainProps {
 
 const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
   const navigate = useNavigate();
+  const [noteList, setNoteList] = useState([]);
   const [sortOption, setSortOption] = useState("recentlyCreated");
+
+  useEffect(() => {
+    const savedNotes = JSON.parse(localStorage.getItem("noteList") || "[]");
+    setNoteList(savedNotes);
+  }, []);
+
+  const handleCreateNote = () => {
+    navigate("/note");
+  };
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(event.target.value);
@@ -20,12 +30,12 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
   return (
     <Container>
       <NoteContainer>
-        <NoteTitleContainer>
+        <NoteHeaderContainer>
           <NoteTitle>Notes App</NoteTitle>
           <ThemeToggleButton onClick={toggleTheme}>
             {isDarkMode ? "🌙" : "☀️"}
           </ThemeToggleButton>
-        </NoteTitleContainer>
+        </NoteHeaderContainer>
         <NoteDescription>기록하기!</NoteDescription>
         <SearchContainer>
           <SearchInput type="text" placeholder="검색" />
@@ -34,10 +44,19 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
             <option value="recentlyModified">최신 수정순</option>
           </SortDropdown>
         </SearchContainer>
-        <NoteItem title="할일1" description="할일을하자" />
-        <NoteItem title="할일2" description="할일을하자" />
-        <NoteItem title="할일3" description="할일을하자" />
-        <CreateNoteButton onClick={() => navigate("/note")}>
+        <NoteListContainer>
+          {noteList.map((note: any) => (
+            <NoteItem
+              key={note.id}
+              id={note.id}
+              title={note.title}
+              content={note.content}
+              updatedAt={note.updatedAt}
+            />
+          ))}
+        </NoteListContainer>
+
+        <CreateNoteButton onClick={handleCreateNote}>
           노트 생성
         </CreateNoteButton>
       </NoteContainer>
@@ -66,7 +85,7 @@ const NoteContainer = styled.div`
   position: relative;
 `;
 
-const NoteTitleContainer = styled.div`
+const NoteHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -111,6 +130,11 @@ const SortDropdown = styled.select`
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
+`;
+
+const NoteListContainer = styled.div`
+  height: calc(100% - 16rem);
+  overflow-y: auto;
 `;
 
 const CreateNoteButton = styled.button`

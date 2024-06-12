@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import moment from "moment";
 
 interface NoteProps {
   isDarkMode: boolean;
@@ -15,7 +17,12 @@ const Note = ({ isDarkMode, toggleTheme }: NoteProps) => {
 
   useEffect(() => {
     if (id) {
-      // TODO: id를 이용해 노트 데이터를 불러와서 title과 content 상태 set
+      const noteList = JSON.parse(localStorage.getItem("noteList") || "[]");
+      const note = noteList.find((note: any) => note.id === id);
+      if (note) {
+        setTitle(note.title);
+        setContent(note.content);
+      }
     }
   }, [id]);
 
@@ -28,23 +35,44 @@ const Note = ({ isDarkMode, toggleTheme }: NoteProps) => {
   };
 
   const handleSubmit = () => {
+    const noteList = JSON.parse(localStorage.getItem("noteList") || "[]");
     if (id) {
-      // TODO: 노트 수정 로직 추가
+      const updatedNoteList = noteList.map((note: any) =>
+        note.id === id
+          ? { ...note, title, content, updatedAt: moment().format() }
+          : note
+      );
+      localStorage.setItem("noteList", JSON.stringify(updatedNoteList));
     } else {
-      // TODO: 노트 생성 로직 추가
+      const newNote = {
+        id: uuidv4(),
+        title,
+        content,
+        createdAt: moment().format(),
+        updatedAt: moment().format(),
+      };
+      noteList.push(newNote);
+      localStorage.setItem("noteList", JSON.stringify(noteList));
     }
+    navigate("/");
+  };
+
+  const handleDelete = () => {
+    const noteList = JSON.parse(localStorage.getItem("noteList") || "[]");
+    const updatedNoteList = noteList.filter((note: any) => note.id !== id);
+    localStorage.setItem("noteList", JSON.stringify(updatedNoteList));
     navigate("/");
   };
 
   return (
     <Container>
       <NoteContainer>
-        <NoteTitleContainer>
+        <NoteHeaderContainer>
           <NoteTitle>Notes App</NoteTitle>
           <ThemeToggleButton onClick={toggleTheme}>
             {isDarkMode ? "🌙" : "☀️"}
           </ThemeToggleButton>
-        </NoteTitleContainer>
+        </NoteHeaderContainer>
         <NoteDescription>기록하기!</NoteDescription>
         <Input
           type="text"
@@ -57,7 +85,10 @@ const Note = ({ isDarkMode, toggleTheme }: NoteProps) => {
           value={content}
           onChange={handleContentChange}
         />
-        <SubmitButton onClick={handleSubmit}>확인</SubmitButton>
+        <ButtonContainer>
+          {id && <DeleteButton onClick={handleDelete}>삭제</DeleteButton>}
+          <SubmitButton onClick={handleSubmit}>확인</SubmitButton>
+        </ButtonContainer>
       </NoteContainer>
     </Container>
   );
@@ -84,7 +115,7 @@ const NoteContainer = styled.div`
   position: relative;
 `;
 
-const NoteTitleContainer = styled.div`
+const NoteHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -130,6 +161,14 @@ const Textarea = styled.textarea`
   color: ${({ theme }) => theme.colors.text};
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 1rem;
+  width: 90%;
+`;
+
 const SubmitButton = styled.button`
   background-color: ${({ theme }) => theme.colors.blue};
   color: ${({ theme }) => theme.colors.white};
@@ -137,7 +176,13 @@ const SubmitButton = styled.button`
   border: none;
   border-radius: 1rem;
   cursor: pointer;
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
+`;
+
+const DeleteButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.red};
+  color: ${({ theme }) => theme.colors.white};
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
 `;
