@@ -30,12 +30,12 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
   return (
     <Container>
       <NoteContainer>
-        <NoteTitleContainer>
+        <NoteHeaderContainer>
           <NoteTitle>Notes App</NoteTitle>
           <ThemeToggleButton onClick={toggleTheme}>
             {isDarkMode ? "🌙" : "☀️"}
           </ThemeToggleButton>
-        </NoteTitleContainer>
+        </NoteHeaderContainer>
         <NoteDescription>기록하기!</NoteDescription>
         <SearchContainer>
           <SearchInput type="text" placeholder="검색" />
@@ -44,15 +44,18 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
             <option value="recentlyModified">최신 수정순</option>
           </SortDropdown>
         </SearchContainer>
-        {noteList.map((note: any) => (
-          <NoteItem
-            key={note.id}
-            id={note.id}
-            title={note.title}
-            content={note.content}
-            updatedAt={note.updatedAt}
-          />
-        ))}
+        <NoteListContainer>
+          {noteList.map((note: any) => (
+            <NoteItem
+              key={note.id}
+              id={note.id}
+              title={note.title}
+              content={note.content}
+              updatedAt={note.updatedAt}
+            />
+          ))}
+        </NoteListContainer>
+
         <CreateNoteButton onClick={handleCreateNote}>
           노트 생성
         </CreateNoteButton>
@@ -82,7 +85,7 @@ const NoteContainer = styled.div`
   position: relative;
 `;
 
-const NoteTitleContainer = styled.div`
+const NoteHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -127,6 +130,11 @@ const SortDropdown = styled.select`
   border-radius: 1rem;
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
+`;
+
+const NoteListContainer = styled.div`
+  height: calc(100% - 16rem);
+  overflow-y: auto;
 `;
 
 const CreateNoteButton = styled.button`

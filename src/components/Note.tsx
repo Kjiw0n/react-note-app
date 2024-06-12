@@ -67,12 +67,12 @@ const Note = ({ isDarkMode, toggleTheme }: NoteProps) => {
   return (
     <Container>
       <NoteContainer>
-        <NoteTitleContainer>
+        <NoteHeaderContainer>
           <NoteTitle>Notes App</NoteTitle>
           <ThemeToggleButton onClick={toggleTheme}>
             {isDarkMode ? "🌙" : "☀️"}
           </ThemeToggleButton>
-        </NoteTitleContainer>
+        </NoteHeaderContainer>
         <NoteDescription>기록하기!</NoteDescription>
         <Input
           type="text"
@@ -115,7 +115,7 @@ const NoteContainer = styled.div`
   position: relative;
 `;
 
-const NoteTitleContainer = styled.div`
+const NoteHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
