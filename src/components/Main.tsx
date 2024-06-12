@@ -19,6 +19,7 @@ interface Note {
 const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
   const navigate = useNavigate();
   const [noteList, setNoteList] = useState<Note[]>([]);
+  const [sortedNotes, setSortedNotes] = useState<Note[]>([]);
   const [sortOption, setSortOption] = useState("recentlyCreated");
 
   const selectList = ["recentlyCreated", "recentlyModified"];
@@ -34,24 +35,24 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
   useEffect(() => {
     const sortNotes = () => {
       if (noteList.length > 0) {
-        const sortedNotes = [...noteList];
+        const sorted = [...noteList];
         if (sortOption === "recentlyCreated") {
-          sortedNotes.sort(
+          sorted.sort(
             (a, b) =>
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         } else if (sortOption === "recentlyModified") {
-          sortedNotes.sort(
+          sorted.sort(
             (a, b) =>
               new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
           );
         }
-        setNoteList(sortedNotes);
+        setSortedNotes(sorted);
       }
     };
 
     sortNotes();
-  }, [sortOption]);
+  }, [sortOption, noteList]);
 
   const handleCreateNote = () => {
     navigate("/note");
@@ -82,8 +83,8 @@ const Main = ({ isDarkMode, toggleTheme }: MainProps) => {
           </SortDropdown>
         </SearchContainer>
         <NoteListContainer>
-          {noteList.length > 0 ? (
-            noteList.map((note) => (
+          {sortedNotes.length > 0 ? (
+            sortedNotes.map((note) => (
               <NoteItem
                 key={note.id}
                 id={note.id}
